@@ -40,17 +40,13 @@ export default function NoteList({ notes }: NoteListProps) {
           <div className={css.footer}>
             <span className={css.tag}>{note.tag || "No tag"}</span>
 
-            <Link
-              href={`/notes/${note.id}`}
-              className={css.link}
+            <Link href={`/notes/${note.id}`} className={css.buttonDetails}
               aria-label={`View details of note ${note.title}`}
             >
               View details
             </Link>
 
-            <button
-              className={css.button}
-              onClick={() => {
+            <button className={css.button} onClick={() => {
                 setDeletingId(note.id);
                 deleteMutation(note.id);
               }}
