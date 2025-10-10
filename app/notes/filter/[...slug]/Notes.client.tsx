@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import css from "./Notes.client.module.css";
 import {
   useQuery,
-  keepPreviousData,
+  keepPreviousData
 } from "@tanstack/react-query";
 import { fetchNotes } from "@/lib/api";
 import NoteList from "@/components/NoteList/NoteList";
@@ -17,7 +17,7 @@ import { type CategoryNoAll } from "@/types/note";
 
 
 type NotesClientProps = {
-  category?: CategoryNoAll;
+  category: string | undefined;
 };
 
 export default function NotesClient({ category }: NotesClientProps) {
@@ -34,7 +34,7 @@ export default function NotesClient({ category }: NotesClientProps) {
       { page: currentPage, perPage, search, tag: category ?? null },
     ],
     queryFn: () =>
-      fetchNotes(currentPage, perPage, search || undefined),
+      fetchNotes(currentPage, perPage, search || undefined, category as CategoryNoAll | undefined),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -57,15 +57,6 @@ export default function NotesClient({ category }: NotesClientProps) {
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox onSearch={setSearchInput} />
-        <button className={css.button} onClick={() => setIsModalOpen(true)}>
-          Create note +
-        </button>
-      </header>
-
-      <main className="notes-list">
-        {isLoading && <p>Loading…</p>}
-        {isError && <p>Something went wrong.</p>}
-        {data && !isLoading && <NoteList notes={data.notes ?? []} />}
 
         {hasResults && totalPages > 1 && (
           <Pagination
@@ -74,7 +65,19 @@ export default function NotesClient({ category }: NotesClientProps) {
             onPageChange={setCurrentPage}
           />
         )}
+        <button className={css.button} onClick={() => setIsModalOpen(true)}>
+          Create note +
+        </button>
+      </header>
 
+      <main  className={css.notesList}>
+        {isLoading && <p>Loading…</p>}
+        {isError && <p>Something went wrong.</p>}
+       
+
+        {data && !isLoading && <NoteList notes={data.notes ?? []} />}
+
+       
         {isFetching && !isLoading && <p>Updating…</p>}
 
         {isModalOpen && (
