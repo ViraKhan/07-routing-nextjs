@@ -28,10 +28,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <TanStackProvider>
           <Header />
-          <main>
-            {children}
+           <main style={{ flex: 1 }}>
+            {children} </main>
             {modal}
-          </main>
           <Footer />
         </TanStackProvider>
       </body>
